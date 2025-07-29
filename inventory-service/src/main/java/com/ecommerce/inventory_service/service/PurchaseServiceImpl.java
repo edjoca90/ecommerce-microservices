@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.ecommerce.inventory_service.DTO.ProductDTO;
+import com.ecommerce.inventory_service.DTO.PurchaseResponseDTO;
+import com.ecommerce.inventory_service.model.Inventory;
 import com.ecommerce.inventory_service.model.Purchase;
 import com.ecommerce.inventory_service.repository.PurchaseRepository;
 
@@ -16,9 +18,10 @@ import com.ecommerce.inventory_service.repository.PurchaseRepository;
 public class PurchaseServiceImpl implements PurchaseService {
 
     private final PurchaseRepository puchaseRepository;
+    private InventoryService inventoryService;
     @Autowired
     private RestTemplate restTemplate;
-    private final String PRODUCTS_URL = "http://localhost:8081/api/productos"; 
+    private final String PRODUCTS_URL = "http://localhost:8081/products"; 
 
     @Autowired
     public PurchaseServiceImpl(PurchaseRepository puchaseRepository) {
@@ -47,10 +50,20 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public Purchase newPurchase(Purchase purchase) {
-
-        purchase.setPurchaseDate(LocalDateTime.now());
-        return puchaseRepository.save(purchase);
+    public PurchaseResponseDTO newPurchase(Purchase purchase) {
+        //verify product quantity
+        Optional<Inventory> opt = inventoryService.findByProductId(purchase.getProductId());
+        if (opt.isPresent() && opt.get().getQuantity() >= purchase.getPurchaseQuantity()) {
+            Inventory inv = opt.get();
+            purchase.setPurchaseDate(LocalDateTime.now());
+            Purchase newPurchase= puchaseRepository.save(purchase);
+            ProductDTO product= getProductById(purchase.getProductId());
+            PurchaseResponseDTO response = new PurchaseResponseDTO(newPurchase, product);
+            inventoryService.disccountStock(purchase.getProductId(), purchase.getPurchaseQuantity());
+            return response;
+            
+           
+        }else return null;
     }
 
     @Override

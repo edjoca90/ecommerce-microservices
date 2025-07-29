@@ -54,8 +54,8 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public ResponseEntity<Purchase> registrarCompra(@Valid @RequestBody Purchase purchase) {
-        Purchase newPurchase = purchaseService.newPurchase(purchase);
+    public ResponseEntity<PurchaseResponseDTO> registrarCompra(@Valid @RequestBody Purchase purchase) {
+        PurchaseResponseDTO newPurchase = purchaseService.newPurchase(purchase);
         return ResponseEntity.ok(newPurchase);
     }
     

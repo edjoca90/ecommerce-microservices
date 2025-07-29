@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.ecommerce.inventory_service.model.Inventory;
 import com.ecommerce.inventory_service.repository.InventoryRepository;
@@ -14,9 +13,7 @@ import com.ecommerce.inventory_service.repository.InventoryRepository;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    @Autowired
-    private RestTemplate restTemplate;
-    private final String PRODUCTOS_URL = "http://localhost:8081/api/productos";
+    
     @Autowired
     public InventoryServiceImpl(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
