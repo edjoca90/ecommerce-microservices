@@ -1,4 +1,5 @@
-package com.ecommerce.DTO;
+package com.ecommerce.inventory_service.DTO;
+
 
 import java.math.BigDecimal;
 
@@ -10,5 +11,4 @@ public class ProductDTO {
     private String name;
     private BigDecimal price;
     private String description;
-    private Integer quantity;
 }

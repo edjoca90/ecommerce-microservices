@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.inventory_service.model.Inventory;
 import com.ecommerce.inventory_service.service.InventoryService;
 
@@ -35,26 +34,16 @@ public class InventoryController {
         return inventoryService.listAll();
     }
 
-    @GetMapping("/products/{productId}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer productId) {
-         Optional<ProductDTO> product = inventoryService.findByProductId(productId);
-         if (compraOpt.isEmpty()) {
-        return ResponseEntity.notFound().build();
-    }
-
-    Compra compra = compraOpt.get();
-    ProductoDTO producto = compraService.obtenerProductoPorId(compra.getProductoId());
-
-    if (producto == null) {
-        return ResponseEntity.status(502).body(new CompraConProductoDTO(compra, null)); // producto no disponible
-    }
-
-    return ResponseEntity.ok(new CompraConProductoDTO(compra, producto));
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Inventory> getProductById(@PathVariable Integer productId) {
+        return inventoryService.findByProductId(productId)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
     } 
 
     @PostMapping
-    public ResponseEntity<Inventory> save(@Valid @RequestBody Inventory inventory) {
-        Inventory newItem = inventoryService.save(inventory);
+    public ResponseEntity<Object> save(@Valid @RequestBody Inventory inventory) {
+        Object newItem = inventoryService.save(inventory);
         return ResponseEntity.ok(newItem);
     }
 

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.ecommerce.DTO.ProductDTO;
 import com.ecommerce.inventory_service.model.Inventory;
 import com.ecommerce.inventory_service.repository.InventoryRepository;
 
@@ -29,12 +28,8 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public ProductDTO findByProductId(Integer productId) {
-        try {
-            return restTemplate.getForObject(PRODUCTOS_URL + "/" + productId, ProductDTO.class);
-        } catch (Exception e) {
-            return null; // o lanzar excepción si lo prefieres
-        }
+    public Optional<Inventory> findByProductId(Integer productId) {        
+        return inventoryRepository.findByProductId(productId);
     }
 
     @Override
