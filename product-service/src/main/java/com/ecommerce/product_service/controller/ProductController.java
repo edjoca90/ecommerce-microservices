@@ -19,7 +19,7 @@ import com.ecommerce.product_service.service.ProductService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
