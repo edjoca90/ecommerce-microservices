@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ecommerce.inventory_service.model.Inventory;
 import com.ecommerce.inventory_service.service.InventoryService;
 
+@ActiveProfiles("test")
 @WebMvcTest(InventoryController.class)
 class InventoryControllerTest {
 
@@ -31,9 +33,16 @@ class InventoryControllerTest {
     void testDisccountStock_Success() throws Exception {
         when(inventoryService.disccountStock(10, 5)).thenReturn(true);
 
+        String requestJson = """
+            {
+            "productId": 10,
+            "quantity": 5
+            }
+            """;
+
         mockMvc.perform(post("/inventory/disscount")
-                        .param("productId", "10")
-                        .param("quantity", "5"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Stock descontado correctamente"));
     }
@@ -42,9 +51,16 @@ class InventoryControllerTest {
     void testDisccountStock_Failure() throws Exception {
         when(inventoryService.disccountStock(10, 100)).thenReturn(false);
 
+        String requestJson = """
+            {
+            "productId": 10,
+            "quantity": 100
+            }
+            """;
+
         mockMvc.perform(post("/inventory/disscount")
-                        .param("productId", "10")
-                        .param("quantity", "100"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("No hay stock suficiente"));
     }
