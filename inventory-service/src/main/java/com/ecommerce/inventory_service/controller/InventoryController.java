@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.inventory_service.model.Inventory;
@@ -48,11 +47,9 @@ public class InventoryController {
     }
 
     @PostMapping("/disscount")
-    public ResponseEntity<String> disccountStock(
-            @RequestParam Integer productId,
-            @RequestParam int quantity) {
+    public ResponseEntity<String> disccountStock(@Valid @RequestBody Inventory inventory) {
 
-        boolean exito = inventoryService.disccountStock(productId, quantity);
+        boolean exito = inventoryService.disccountStock(inventory.getProductId(), inventory.getQuantity());
         if (exito) {
             return ResponseEntity.ok("Stock descontado correctamente");
         } else {
