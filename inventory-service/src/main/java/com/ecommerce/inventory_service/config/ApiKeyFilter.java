@@ -3,6 +3,7 @@ package com.ecommerce.inventory_service.config;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.Filter;
@@ -13,6 +14,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Profile("!test")
 @Component
 public class ApiKeyFilter implements Filter {
 
