@@ -12,6 +12,6 @@ public interface PurchaseService {
     Optional<Purchase> getById(Integer id);
     List<Purchase> getByProduct(Integer productId);
     PurchaseResponseDTO newPurchase(Purchase purchase);
-    Integer getStockByProduct(Integer productId);
+    // Integer getStockByProduct(Integer productId);
     ProductDTO getProductById(Integer productId);
 }
