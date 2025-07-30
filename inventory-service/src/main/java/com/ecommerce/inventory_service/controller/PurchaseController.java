@@ -20,7 +20,7 @@ import com.ecommerce.inventory_service.service.PurchaseService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/compras")
+@RequestMapping("/purchase")
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
@@ -47,11 +47,11 @@ public class PurchaseController {
         return purchaseService.getByProduct(productoId);
     }
 
-    @GetMapping("/stock/{productId}")
-    public ResponseEntity<String> getStockByProduct(@PathVariable Integer productId) {
-        Integer stock = purchaseService.getStockByProduct(productId);
-        return ResponseEntity.ok("Total comprado del producto " + productId + ": " + stock);
-    }
+    // @GetMapping("/stock/{productId}")
+    // public ResponseEntity<String> getStockByProduct(@PathVariable Integer productId) {
+    //     Integer stock = purchaseService.getStockByProduct(productId);
+    //     return ResponseEntity.ok("Total comprado del producto " + productId + ": " + stock);
+    // }
 
     @PostMapping
     public ResponseEntity<PurchaseResponseDTO> registrarCompra(@Valid @RequestBody Purchase purchase) {
@@ -68,6 +68,7 @@ public class PurchaseController {
 
         Purchase purchase = purchaseOpt.get();
         ProductDTO product = purchaseService.getProductById(purchase.getProductId());
+        System.out.println(product);
 
         if (product == null) {
             return ResponseEntity.status(502).body(new PurchaseResponseDTO(purchase, null)); // producto no disponible

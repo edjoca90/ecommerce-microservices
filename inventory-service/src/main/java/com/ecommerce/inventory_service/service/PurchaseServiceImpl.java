@@ -18,6 +18,7 @@ import com.ecommerce.inventory_service.repository.PurchaseRepository;
 public class PurchaseServiceImpl implements PurchaseService {
 
     private final PurchaseRepository puchaseRepository;
+    @Autowired
     private InventoryService inventoryService;
     @Autowired
     private RestTemplate restTemplate;
@@ -38,9 +39,10 @@ public class PurchaseServiceImpl implements PurchaseService {
         return puchaseRepository.findById(id);
     }
     public ProductDTO getProductById(Integer productId) {
-        try {
+        try {            
             return restTemplate.getForObject(PRODUCTS_URL + "/" + productId, ProductDTO.class);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -66,10 +68,5 @@ public class PurchaseServiceImpl implements PurchaseService {
         }else return null;
     }
 
-    @Override
-    public Integer getStockByProduct(Integer productId) {
-        Integer total = puchaseRepository.totalByProduct(productId);
-        return total != null ? total : 0;
-    }
     
 }
